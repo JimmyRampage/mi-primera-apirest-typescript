@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from 'express';
+import userRoutes from './routes/user.routes'; // rutas del usuario
 
 const APP: Application = express();
 
@@ -10,5 +11,7 @@ APP.get('/info', (req: Request, res: Response) => {
     author: 'JimmyRampage'
   });
 });
+
+APP.use('/api/users', userRoutes);
 
 export default APP;
