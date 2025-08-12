@@ -5,12 +5,21 @@ import { AppError } from "../utils/AppError";
 
 export const getUsers = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = userService.getAllUsers();
+    let users = userService.getAllUsers();
+    const { name, email, phone } = req.query;
+    if (name) {
+      users = users.filter(user => user.name.toLowerCase().includes((name as string).toLowerCase()));
+    }
+    if (email) {
+      users = users.filter(user => user.email.toLowerCase() === (email as string).toLowerCase());
+    }
+    if (phone) {
+      users = users.filter(user => user.phone === (phone as string).toLowerCase())
+    }
     if (!users) {
       throw new AppError(404, 'No se encontraron usuarios')
     }
     res.status(200).json(users);
-    
   } catch (error) {
     next(error)
   }
