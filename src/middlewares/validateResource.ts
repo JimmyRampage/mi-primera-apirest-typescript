@@ -1,0 +1,16 @@
+import { Request, Response, NextFunction } from "express";
+import { ZodObject } from 'zod'; // tambien se puede usar ZodTypeAny -> para cualquier tipo de schema
+
+export const validate = (schema: ZodObject) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    try {
+      schema.parse({
+        body: req.body,
+        query:req.query,
+        params: req.params
+      });
+      next();
+    } catch (error: any) {
+      return res.status(400).send(error.errors);
+    }
+}
