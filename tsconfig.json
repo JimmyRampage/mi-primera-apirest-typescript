@@ -16,7 +16,7 @@
     "moduleResolution": "NodeNext",            // Algoritmo para resolver módulos, alineado con 'module'.
     "baseUrl": ".",                            // Directorio base para resolver rutas de importación no relativas.
     "paths": {
-      "@/*": ["src/*"]                         // Permite importaciones de alias. Por ejemplo, 'import x from "@/services/miServicio"' en lugar de '../../services/miServicio'.
+      //"@/*": ["src/*"]                         // Permite importaciones de alias. Por ejemplo, 'import x from "@/services/miServicio"' en lugar de '../../services/miServicio'.
     },
     "resolveJsonModule": true,                 // Permite importar archivos .json como módulos.
 

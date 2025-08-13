@@ -3,9 +3,9 @@ import * as userService from '../services/user.service'
 import { User } from '../models/user.model'
 import { AppError } from "../utils/AppError";
 
-export const getUsers = (req: Request, res: Response, next: NextFunction) => {
+export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let users = userService.getAllUsers();
+    let users = await userService.getAllUsers();
     const { name, email, phone } = req.query;
     if (name) {
       users = users.filter(user => user.name.toLowerCase().includes((name as string).toLowerCase()));
@@ -25,13 +25,13 @@ export const getUsers = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export const getUser = (req: Request, res: Response, next: NextFunction) => {
+export const getUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) { // Validamos que el id sea un numero
       throw new AppError(400, 'El ID debe ser un número');
     }
-    const user = userService.getUserById(id)
+    const user = await userService.getUserById(id)
     if (!user) { // Si no se encuentra el usuario activa el handler
       throw new AppError(404, 'Usuario no encontrado');
     }
@@ -41,20 +41,20 @@ export const getUser = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export const createNewUser = (req: Request, res: Response, next: NextFunction) => {
+export const createNewUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { name, email, phone } = req.body as User;
     if (!name || !email) {
       throw new AppError(400, 'Nombre y Email obligatorio, Teléfono opcional');
     }
-    const newUser = userService.createUser(name, email, phone)
+    const newUser = await userService.createUser(name, email, phone)
     res.status(201).json(newUser)
   } catch (error) {
     next(error)
   }
 }
 
-export const updateExistingUser = (req: Request, res: Response, next: NextFunction) => {
+export const updateExistingUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
@@ -64,7 +64,7 @@ export const updateExistingUser = (req: Request, res: Response, next: NextFuncti
     if (!name || !email) {
       throw new AppError(400, 'Nombre y email son requeridos');
     }
-    const updatedUser = userService.updateUser(id, name, email, phone);
+    const updatedUser = await userService.updateUser(id, name, email, phone);
     if (updatedUser) {
       res.status(200).json(updatedUser);
     } else {
@@ -75,13 +75,13 @@ export const updateExistingUser = (req: Request, res: Response, next: NextFuncti
   }
 };
 
-export const deleteExistingUser = (req: Request, res: Response, next: NextFunction) => {
+export const deleteExistingUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
       throw new AppError(400, 'El id debe ser número');
     }
-    const success = userService.deleteUser(id);
+    const success = await userService.deleteUser(id);
     if (success) {
       res.status(204).send(); // 204 para eliminaciones exitosas
     } else {

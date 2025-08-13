@@ -11,3 +11,11 @@ yarn-error.log*
 
 # Variables de entorno
 .env
+/src/generated/prisma
+
+# Prisma
+# Ignora los archivos de la base de datos de SQLite
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
