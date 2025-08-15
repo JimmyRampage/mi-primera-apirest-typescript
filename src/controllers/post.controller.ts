@@ -34,11 +34,15 @@ export const getPost = async (req: Request, res: Response, next: NextFunction) =
 
 export const createNewPost = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { title, content, authorId, published } = req.body as Post;
-    if (!title || !authorId) {
-      throw new AppError(400, 'Titulo y autorId obligatorio');
+    const authorId = req.user?.id;
+    if (!authorId) {
+      throw new AppError(401, 'No estás autenticado');
     }
-    const newPost = await postService.createPost(title, content, authorId, published);
+    const { title, content, published } = req.body as Partial<Post>;
+    if (!title) {
+      throw new AppError(400, 'Titulo obligatorio');
+    }
+    const newPost = await postService.createPost(title, content || '', authorId, published);
     res.status(201).json(newPost);
   } catch (error) {
     next(error);
@@ -51,15 +55,23 @@ export const updateExistingPost = async (req: Request, res: Response, next: Next
     if (isNaN(id)) {
       throw new AppError(400, 'El id debe ser númerico');
     }
-    const { title, content, published } = req.body as Post;
-    // if (!title) {
-    //   throw new AppError(400, 'Titulo requerido');
-    // }
+    const requesterId = req.user?.id;
+    if (!requesterId) {
+      throw new AppError(401, 'No estás autenticado');
+    }
+    const existing = await postService.getPostById(id);
+    if (!existing) {
+      throw new AppError(404, ' Post no encontrado');
+    }
+    if (existing.authorId !== requesterId) {
+      throw new AppError(403, 'No tienes permisos para modificar este post. No es tuyo');
+    }
+    const { title, content, published } = req.body as Partial<Post>;
     const updatedPost = await postService.updatePost(id, title, content, published);
     if (updatedPost) {
       res.status(200).json(updatedPost);
     } else {
-      throw new AppError(400, 'Post no encontrado');
+      throw new AppError(400, 'Post no se pudo actializar');
     }
   } catch (error) {
     next(error);
@@ -71,6 +83,17 @@ export const deleteExistingPost = async (req: Request, res: Response, next: Next
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
       throw new AppError(400, 'El id debe ser número');
+    }
+    const requesterId = req.user?.id;
+    if (!requesterId) {
+      throw new AppError(401, 'No estás autenticado');
+    }
+    const existing = await postService.getPostById(id);
+    if (!existing) {
+      throw new AppError(404, 'Post no encontrado');
+    }
+    if (existing.authorId !== requesterId) {
+      throw new AppError(403, 'No tienes permisos para eliminar este post');
     }
     const success = await postService.deletePost(id);
     if (success) {
