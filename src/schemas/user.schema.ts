@@ -1,4 +1,4 @@
-import { email, z } from "zod";
+import { z } from 'zod';
 
 // Este objeto zod permite validar la creacion de un usuario
 export const createUserSchema = z.object({
@@ -10,7 +10,7 @@ export const createUserSchema = z.object({
       .regex(/^\+\d{7,15}$/, {message: 'Numero debe empezar con "+" y tener entre 7 a 15 digitos'})
       .optional()
   })
-})
+});
 
 export const updateUserSchema = z.object({
   params: z.object({
