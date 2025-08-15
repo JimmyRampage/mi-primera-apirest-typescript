@@ -43,11 +43,11 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
 
 export const createNewUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, email, phone } = req.body as User;
-    if (!name || !email) {
-      throw new AppError(400, 'Nombre y Email obligatorio, Teléfono opcional');
+    const { name, email, phone, password } = req.body as User;
+    if (!name || !email || !password) {
+      throw new AppError(400, 'Nombre, Email y Password obligatorio, Teléfono opcional');
     }
-    const newUser = await userService.createUser(name, email, phone);
+    const newUser = await userService.createUser(name, email, password, phone);
     res.status(201).json(newUser);
   } catch (error) {
     next(error);

@@ -22,7 +22,9 @@ export const updateUserSchema = z.object({
       .min(3)
       .optional(),
     email: z.email()
-      .optional()
+      .optional(),
+    password: z.string()
+      .min(3)
   })
     .partial() // partial convierte automaticamente los parametros en optional
     .refine(data => Object.keys(data).length > 0, {

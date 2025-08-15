@@ -12,9 +12,9 @@ export const getUserById = async (id: number): Promise<User | null> => { // aun 
   });
 }
 
-export const createUser = async (name: string, email: string, phone?:string): Promise<User> => {
+export const createUser = async (name: string, email: string, password: string, phone?:string): Promise<User> => {
   return prisma.user.create({
-    data: { name, email, phone },
+    data: { name, email, phone, password },
   });
 }
 

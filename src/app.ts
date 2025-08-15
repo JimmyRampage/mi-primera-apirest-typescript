@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from 'express';
 import userRoutes from './routes/user.routes'; // rutas del usuario
 import postRoutes from './routes/post.routes'; // rutas del post
+import authRoutes from './routes/auth.routes'; // rutas del auth
 import { errorHandler } from './middlewares/errorHandler';
 
 const APP: Application = express();
@@ -14,6 +15,7 @@ APP.get('/info', (req: Request, res: Response) => {
   });
 });
 
+APP.use('/api/auth', authRoutes);
 APP.use('/api/users', userRoutes);
 APP.use('/api/posts', postRoutes);
 
