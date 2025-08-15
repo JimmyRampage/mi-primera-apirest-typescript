@@ -14,14 +14,14 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
       users = users.filter(user => user.email.toLowerCase() === (email as string).toLowerCase());
     }
     if (phone) {
-      users = users.filter(user => user.phone === (phone as string).toLowerCase())
+      users = users.filter(user => user.phone === (phone as string).toLowerCase());
     }
     if (!users) {
-      throw new AppError(404, 'No se encontraron usuarios')
+      throw new AppError(404, 'No se encontraron usuarios');
     }
     res.status(200).json(users);
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
@@ -31,13 +31,13 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
     if (isNaN(id)) { // Validamos que el id sea un numero
       throw new AppError(400, 'El ID debe ser un número');
     }
-    const user = await userService.getUserById(id)
+    const user = await userService.getUserById(id);
     if (!user) { // Si no se encuentra el usuario activa el handler
       throw new AppError(404, 'Usuario no encontrado');
     }
     res.status(200).json(user); // lo encuentra exitosamente
   } catch (error) {
-    next(error) // Se le pasa el error al middleware (el errorHandler)
+    next(error); // Se le pasa el error al middleware (el errorHandler)
   }
 };
 
@@ -47,10 +47,10 @@ export const createNewUser = async (req: Request, res: Response, next: NextFunct
     if (!name || !email) {
       throw new AppError(400, 'Nombre y Email obligatorio, Teléfono opcional');
     }
-    const newUser = await userService.createUser(name, email, phone)
-    res.status(201).json(newUser)
+    const newUser = await userService.createUser(name, email, phone);
+    res.status(201).json(newUser);
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
