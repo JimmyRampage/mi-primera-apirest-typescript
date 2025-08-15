@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/server.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest --watchAll --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
@@ -13,8 +14,13 @@
   "type": "commonjs",
   "devDependencies": {
     "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.2.1",
+    "@types/supertest": "^6.0.3",
+    "jest": "^30.0.5",
     "prisma": "^6.14.0",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.2"
   },
